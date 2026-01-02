@@ -1,0 +1,312 @@
+/* ===============================
+   Design Tokens
+   =============================== */
+$bg-main: #0e0e0e; // พื้นหลังหลัก (ดำไม่สนิท)
+$bg-surface: #161616; // sidebar / modal / card
+$bg-surface-2: #1e1e1e; // footer / hover
+
+$text-primary: #ffffff;
+$text-secondary: #cfcfcf;
+$text-muted: #9a9a9a;
+
+$accent-orange: #ff9f1a;
+$accent-orange-hover: #ffb347;
+
+$border-dark: #2a2a2a;
+
+/* ===============================
+   Reset & Base
+   =============================== */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: $bg-main;
+  color: $text-primary;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+/* ===============================
+   Typography
+   =============================== */
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  color: $text-primary;
+}
+
+p {
+  margin: 0;
+  color: $text-secondary;
+}
+
+/* ===============================
+   Utility Classes
+   =============================== */
+.text-orange {
+  color: $accent-orange;
+}
+
+.text-muted {
+  color: $text-muted;
+}
+
+.bg-surface {
+  background-color: $bg-surface;
+}
+
+.bg-surface-2 {
+  background-color: $bg-surface-2;
+}
+
+/* ===============================
+   Ant Design Layout
+   =============================== */
+.ant-layout {
+  background: $bg-main;
+}
+
+.ant-layout-sider {
+  background: $bg-surface !important;
+  border-right: 1px solid $border-dark;
+}
+
+/* ===============================
+   Ant Design Menu (Sidebar)
+   =============================== */
+.ant-menu-dark {
+  background: $bg-surface;
+}
+
+.ant-menu-dark .ant-menu-item {
+  color: $text-secondary;
+}
+
+.ant-menu-dark .ant-menu-item-selected {
+  background-color: transparent !important;
+  color: $accent-orange !important;
+}
+
+.ant-menu-dark .ant-menu-item:hover {
+  color: $accent-orange-hover;
+}
+
+/* ===============================
+   Ant Design Modal (Same as Sidebar)
+   =============================== */
+/* ===============================
+   Ant Design Modal – HARD OVERRIDE
+   =============================== */
+.ant-modal {
+  .ant-modal-title {
+    color: $accent-orange;
+    margin-bottom: 6px;
+  }
+
+  .ant-modal-header {
+    background-color: $bg-surface !important;
+    color: $text-primary;
+  }
+
+  .ant-modal-content,
+  .ant-modal-body,
+  .ant-modal-footer {
+    background-color: $bg-surface !important;
+    color: $text-primary;
+    padding-top: 12px;
+  }
+
+  .ant-modal-footer {
+    border-top: 1px solid $border-dark;
+  }
+
+  .ant-modal-header {
+    border-bottom: 1px solid $border-dark;
+  }
+  .ant-space,
+  .ant-space-item {
+    background: transparent;
+  }
+
+  .ant-divider {
+    border-color: $border-dark;
+  }
+
+  .ant-input,
+  .ant-input-number,
+  .ant-input-affix-wrapper,
+  .ant-radio-group {
+    background-color: $bg-surface-2 !important;
+    color: $text-primary;
+  }
+  .ant-btn-default {
+    background-color: $bg-surface-2;
+    border-color: $border-dark;
+    color: $text-primary;
+  }
+}
+
+/* ===============================
+   Ant Design Form Controls
+   =============================== */
+.ant-input,
+.ant-input-number,
+.ant-input-affix-wrapper,
+.ant-radio-wrapper {
+  background-color: $bg-surface-2;
+  border-color: $border-dark;
+  color: $text-primary;
+}
+
+.ant-input::placeholder {
+  color: $text-muted;
+}
+
+/* ===============================
+   Buttons
+   =============================== */
+.ant-btn-primary {
+  background-color: $accent-orange;
+  border-color: $accent-orange;
+  color: #000;
+  font-weight: 600;
+
+  &:hover {
+    background-color: $accent-orange-hover;
+    border-color: $accent-orange-hover;
+  }
+}
+
+/* ===============================
+   Modal Backdrop (Optional polish)
+   =============================== */
+.ant-modal-mask {
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(2px);
+}
+
+.ant-modal-container,
+.ant-modal-content,
+.ant-modal-header,
+.ant-modal-body,
+.ant-modal-footer {
+  background-color: $bg-surface !important;
+  color: $text-primary;
+}
+
+/* ===============================
+   Ant Design InputNumber FIX
+   =============================== */
+.ant-input-number {
+  background-color: $bg-surface-2 !important;
+  border-color: $border-dark;
+  color: $text-primary;
+}
+
+.ant-input-number-input {
+  background-color: transparent !important;
+  color: $text-primary !important;
+}
+
+.ant-input-number-handler-wrap {
+  background-color: $bg-surface-2;
+  border-left: 1px solid $border-dark;
+}
+
+.ant-input-number-handler-up,
+.ant-input-number-handler-down {
+  color: $text-muted;
+}
+
+.ant-input-number-handler-up:hover,
+.ant-input-number-handler-down:hover {
+  color: $accent-orange;
+}
+
+.ant-modal-close {
+  color: #ffffff !important;
+}
+
+.ant-modal-close:hover {
+  color: $accent-orange !important;
+}
+
+/* สำหรับ icon (svg) */
+.ant-modal-close-x {
+  color: #ffffff !important;
+}
+
+.ant-modal-close-x svg {
+  fill: #ffffff !important;
+}
+
+/* ===============================
+   Ant Design Button – FORCE OVERRIDE
+   =============================== */
+
+.ant-btn,
+.ant-btn-default {
+  background-color: $bg-surface !important;
+  border-color: $border-dark !important;
+  color: $text-primary !important;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+/* Hover / Focus */
+.ant-btn:not(:disabled):hover,
+.ant-btn:not(:disabled):focus {
+  background-color: $bg-surface !important;
+  border-color: $accent-orange !important;
+  color: $accent-orange !important;
+}
+
+/* ===============================
+   Primary Button
+   =============================== */
+.ant-btn-primary {
+  background-color: $accent-orange !important;
+  border-color: $accent-orange !important;
+  color: #000 !important;
+  font-weight: 600;
+}
+
+.ant-btn-primary:not(:disabled):hover,
+.ant-btn-primary:not(:disabled):focus {
+  background-color: $accent-orange-hover !important;
+  border-color: $accent-orange-hover !important;
+  color: #000 !important;
+}
+
+/* ===============================
+   Danger Button
+   =============================== */
+.ant-btn-dangerous {
+  background-color: transparent !important;
+  border-color: #ff4d4f !important;
+  color: #ff4d4f !important;
+}
+
+.ant-btn-dangerous:not(:disabled):hover {
+  background-color: rgba(255, 77, 79, 0.15) !important;
+  border-color: #ff7875 !important;
+  color: #ff7875 !important;
+}
+
+/* ===============================
+   Disabled
+   =============================== */
+.ant-btn:disabled,
+.ant-btn-disabled {
+  background-color: #1a1a1a !important;
+  border-color: #2a2a2a !important;
+  color: #666 !important;
+}
