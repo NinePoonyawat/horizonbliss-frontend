@@ -69,7 +69,9 @@ export default function KitchenPage() {
           {menuCategories.map((category) => (
             <div
               key={category.key}
-              ref={(el) => (sectionRefs.current[category.key] = el)}
+              ref={(el) => {
+                sectionRefs.current[category.key] = el;
+              }}
               data-category={category.key}
               className="menu-section"
             >
