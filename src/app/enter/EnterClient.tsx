@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Spin, Result } from "antd";
 
 export default function EnterClient() {
@@ -10,9 +10,13 @@ export default function EnterClient() {
   const room = params.get("room");
   const [error, setError] = useState("");
 
+  const ranRef = useRef(false);
+
   useEffect(() => {
-    // ยังไม่ hydrate → รอ
+    if (ranRef.current) return;
     if (room === null) return;
+
+    ranRef.current = true;
 
     localStorage.clear();
 
