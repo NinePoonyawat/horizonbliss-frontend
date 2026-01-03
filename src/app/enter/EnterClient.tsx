@@ -11,13 +11,10 @@ export default function EnterClient() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // 🔥 เคลียร์ session เก่าทุกครั้ง
-    localStorage.clear();
+    // ยังไม่ hydrate → รอ
+    if (room === null) return;
 
-    if (!room) {
-      setError("ไม่พบหมายเลขห้อง");
-      return;
-    }
+    localStorage.clear();
 
     const login = async () => {
       try {
@@ -29,8 +26,6 @@ export default function EnterClient() {
             body: JSON.stringify({ roomNo: room }),
           }
         );
-
-        console.log(res);
 
         if (!res.ok) throw new Error();
 
