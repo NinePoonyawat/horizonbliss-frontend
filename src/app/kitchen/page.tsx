@@ -4,18 +4,24 @@ import { useEffect } from "react";
 import { Layout, Card, Affix, Menu, Row, Col, Button, Space } from "antd";
 import { useState, useRef } from "react";
 import { menuCategories, FoodItem } from "../../data/menu";
+import { useRouter } from "next/navigation";
 import { submitOrder } from "../../api/kitchen";
 import OrderModal from "../../components/OrderModal";
 import CartModal from "@/src/components/CartModal";
+import KitchenPageHeader from "@/src/components/KitchenPageHeader";
+import ConfirmOrderModal from "@/src/components/ConfirmOrderModal";
 import "../kitchen.scss";
 
 const { Sider, Content, Footer } = Layout;
 
 export default function KitchenPage() {
+  const router = useRouter();
   const [selectedFood, setSelectedFood] = useState<FoodItem | null>(null);
   const [cart, setCart] = useState<any[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>();
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -23,7 +29,7 @@ export default function KitchenPage() {
 
   async function handleSubmitOrder() {
     const payload = {
-      roomNo: "101",
+      roomNo: localStorage.getItem("roomNo"),
       orderedAt: new Date().toISOString(),
       items: cart.map((c) => ({
         name: c.food.name,
@@ -40,12 +46,19 @@ export default function KitchenPage() {
     };
 
     try {
-      await submitOrder(payload);
-      alert("ส่งออเดอร์เรียบร้อยแล้ว");
-    } catch (err) {
-      alert("ส่งออเดอร์ไม่สำเร็จ");
-    }
+      submitOrder(payload);
+    } catch (err) {}
   }
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const expiresAt = Number(localStorage.getItem("expiresAt"));
+
+    if (!token || Date.now() > expiresAt) {
+      localStorage.clear();
+      router.replace("/");
+    }
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -92,6 +105,7 @@ export default function KitchenPage() {
 
       <Layout>
         {/* ===== Content ===== */}
+        <KitchenPageHeader />
         <Content className="kitchen-content">
           {menuCategories.map((category) => (
             <div
@@ -151,7 +165,17 @@ export default function KitchenPage() {
             <div className="footer-right">
               <Space size="middle">
                 <Button onClick={() => setCartOpen(true)}>ดูรายละเอียด</Button>
-                <Button type="primary" size="large" onClick={handleSubmitOrder}>
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={() => {
+                    if (cart.length === 0) {
+                      alert("คุณยังไม่ได้เลือกเมนูอาหาร");
+                      return;
+                    }
+                    setConfirmOpen(true);
+                  }}
+                >
                   สั่งอาหาร
                 </Button>
               </Space>
@@ -181,6 +205,22 @@ export default function KitchenPage() {
         }}
         onRemove={(id) => {
           setCart((prev) => prev.filter((c) => c.food.id !== id));
+        }}
+      />
+      <ConfirmOrderModal
+        open={confirmOpen}
+        cart={cart}
+        roomNo={localStorage.getItem("roomNo") || ""}
+        loading={submitting}
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={() => {
+          try {
+            setSubmitting(true);
+            handleSubmitOrder();
+            router.replace("/thank-you");
+          } finally {
+            setSubmitting(false);
+          }
         }}
       />
     </Layout>
