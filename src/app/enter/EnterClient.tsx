@@ -20,7 +20,7 @@ export default function EnterClient() {
     const login = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/enter-room`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/enter-room`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

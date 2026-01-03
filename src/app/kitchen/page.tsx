@@ -22,6 +22,7 @@ export default function KitchenPage() {
   const [activeCategory, setActiveCategory] = useState<string>();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [roomNo, setRoomNo] = useState<string>("");
 
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -29,7 +30,7 @@ export default function KitchenPage() {
 
   async function handleSubmitOrder() {
     const payload = {
-      roomNo: localStorage.getItem("roomNo"),
+      roomNo,
       orderedAt: new Date().toISOString(),
       items: cart.map((c) => ({
         name: c.food.name,
@@ -45,9 +46,7 @@ export default function KitchenPage() {
       total: totalPrice,
     };
 
-    try {
-      submitOrder(payload);
-    } catch (err) {}
+    await submitOrder(payload);
   }
 
   useEffect(() => {
@@ -83,6 +82,20 @@ export default function KitchenPage() {
 
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const expiresAt = Number(localStorage.getItem("expiresAt"));
+    const storedRoom = localStorage.getItem("roomNo");
+
+    if (!token || Date.now() > expiresAt || !storedRoom) {
+      localStorage.clear();
+      router.replace("/");
+      return;
+    }
+
+    setRoomNo(storedRoom);
+  }, [router]);
 
   return (
     <Layout className="kitchen-page">
@@ -210,7 +223,7 @@ export default function KitchenPage() {
       <ConfirmOrderModal
         open={confirmOpen}
         cart={cart}
-        roomNo={localStorage.getItem("roomNo") || ""}
+        roomNo={roomNo}
         loading={submitting}
         onCancel={() => setConfirmOpen(false)}
         onConfirm={() => {
