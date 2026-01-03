@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Layout, Card, Affix, Menu, Row, Col, Button, Space } from "antd";
 import { useState, useRef } from "react";
 import { menuCategories, FoodItem } from "../../data/menu";
+import { submitOrder } from "../../api/kitchen";
 import OrderModal from "../../components/OrderModal";
 import CartModal from "@/src/components/CartModal";
 import "../kitchen.scss";
@@ -19,6 +20,32 @@ export default function KitchenPage() {
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const totalPrice = cart.reduce((sum, c) => sum + c.food.price * c.qty, 0);
+
+  async function handleSubmitOrder() {
+    const payload = {
+      roomNo: "101",
+      orderedAt: new Date().toISOString(),
+      items: cart.map((c) => ({
+        name: c.food.name,
+        qty: c.qty,
+        options: {
+          spicy: c.spicy,
+          soup: c.soup,
+          foodType: c.foodType,
+          note: c.note,
+        },
+        price: c.food.price,
+      })),
+      total: totalPrice,
+    };
+
+    try {
+      await submitOrder(payload);
+      alert("ส่งออเดอร์เรียบร้อยแล้ว");
+    } catch (err) {
+      alert("ส่งออเดอร์ไม่สำเร็จ");
+    }
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -122,7 +149,7 @@ export default function KitchenPage() {
             <div className="footer-right">
               <Space size="middle">
                 <Button onClick={() => setCartOpen(true)}>ดูรายละเอียด</Button>
-                <Button type="primary" size="large">
+                <Button type="primary" size="large" onClick={handleSubmitOrder}>
                   สั่งอาหาร
                 </Button>
               </Space>
