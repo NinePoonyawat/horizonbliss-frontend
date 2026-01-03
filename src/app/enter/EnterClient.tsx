@@ -8,10 +8,12 @@ export default function EnterClient() {
   const params = useSearchParams();
   const router = useRouter();
   const room = params.get("room");
-
   const [error, setError] = useState("");
 
   useEffect(() => {
+    // 🔥 เคลียร์ session เก่าทุกครั้ง
+    localStorage.clear();
+
     if (!room) {
       setError("ไม่พบหมายเลขห้อง");
       return;
@@ -20,7 +22,7 @@ export default function EnterClient() {
     const login = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/enter-room`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/enter-room`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -28,7 +30,9 @@ export default function EnterClient() {
           }
         );
 
-        if (!res.ok) throw new Error("auth failed");
+        console.log(res);
+
+        if (!res.ok) throw new Error();
 
         const data = await res.json();
 
@@ -37,7 +41,7 @@ export default function EnterClient() {
         localStorage.setItem("expiresAt", data.expiresAt);
 
         router.replace("/kitchen");
-      } catch (e) {
+      } catch {
         setError("ไม่สามารถเข้าสู่ระบบได้");
       }
     };
